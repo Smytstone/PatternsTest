@@ -3,10 +3,16 @@ package ru.netology.delivery.data;
 import com.github.javafaker.Faker;
 import lombok.Value;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.time.LocalDate.now;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class DataGenerator {
     private DataGenerator() {
@@ -17,7 +23,18 @@ public class DataGenerator {
     public static String generateDate(int shift) {
         // TODO: добавить логику для объявления переменной date и задания её значения, для генерации строки с датой
         // Вы можете использовать класс LocalDate и его методы для получения и форматирования даты
-        return now().plusDays( 4).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+//        String startDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+//        String endDate = LocalDate.now().plusYears(5).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate start = LocalDate.now();
+        long days = ChronoUnit.DAYS.between(start, LocalDate.now().plusYears(3));
+        LocalDate randomDate = start.plusDays(new Random().nextInt((int) days + 1));
+//        LocalDate startDate = LocalDate.now();
+//        LocalDate endDate = LocalDate.of(2025, 10, 31);
+////        LocalDate endDate = LocalDate.now();
+//        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+//        long randomNumberOfDays = ThreadLocalRandom.current().nextLong(daysBetween + 1);
+//        LocalDate randomDate = startDate.plusYears(randomNumberOfDays);
+        return randomDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 
     public static String generateCity(String locale) {
