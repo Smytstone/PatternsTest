@@ -1,10 +1,9 @@
-package ru.netology.delivery.data;
-import com.github.javafaker.Faker;
+package ru.netology.delivery.test;
 import org.junit.jupiter.api.Test;
+import ru.netology.delivery.data.DataGenerator;
 
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
@@ -17,18 +16,13 @@ import static org.openqa.selenium.Keys.BACK_SPACE;
 public class PatternsTest {
     @Test
     public void shouldTestForm() {
-        Faker faker = new Faker(new Locale("ru"));
-        String city = faker.address().city();
-        String name = faker.name().fullName();
-        String phone = faker.phoneNumber().phoneNumber();
-
-
+        var newUser = DataGenerator.Registration.generateUser("ru");
         open("http://localhost:9999");
-        $("[data-test-id=city] input").setValue(city);
+        $("[data-test-id=city] input").val(newUser.getCity());
         $("[data-test-id=date] input").sendKeys(LEFT_CONTROL, INSERT, BACK_SPACE);
-        $("[data-test-id=date] input").setValue((now().plusDays( 4).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))));
-        $("[data-test-id=name] input").setValue(name);
-        $("[data-test-id=phone] input").setValue(phone);
+        $("[data-test-id=date] input").val(DataGenerator.generateDate(1));
+        $("[data-test-id=name] input").val(newUser.getName());
+        $("[data-test-id=phone] input").val(newUser.getPhone());
         $("[data-test-id=agreement]").click();
         $(".button").click();
         $(".notification").shouldBe(visible, Duration.ofSeconds(10));
